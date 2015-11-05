@@ -8,7 +8,7 @@ object CustomersModel {
 
   case class Customer(id: Option[Int], name: String, surname: Option[String], gender: Option[String])
 
-  class Customers(tag: Tag) extends Table[Customer](tag, "customers"){
+  class Customers(tag: Tag) extends Table[Customer](tag, "customer"){
 
     def id = column[Int]("id", O.PrimaryKey, O.AutoInc)
     def name = column[String]("name")

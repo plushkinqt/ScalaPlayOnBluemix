@@ -12,3 +12,4 @@ tmp
 dist
 .cache
 conf/application.conf
+ssl/
