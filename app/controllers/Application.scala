@@ -1,11 +1,11 @@
 package controllers
 
-import Models.CustomersModel.{Customer, Customers}
-import play.api.libs.functional.syntax._
+import Models.CustomersModel.{Addresses, Address, Customer, Customers}
 import play.api.libs.json._
 import play.api.mvc._
 //import slick.driver.H2Driver.api._
 import slick.driver.MySQLDriver.api._
+import play.api.libs.functional.syntax._
 import scala.concurrent.Await
 import scala.concurrent.duration.Duration
 
@@ -19,11 +19,11 @@ class Application extends Controller {
 */
 
   val customers : TableQuery[Customers] = TableQuery[Customers]
-
+  lazy val addresses = TableQuery[Addresses]
   def index = Action {
-    var list: List[Customer] = List[Customer](new Customer(Option(1),"crap", Option("crapovitch"), Option("male")), new Customer(Option(2),"vasya", Option("vasilievits"), Option("male")),
-    new Customer(Option(3),"kolya", Option("kolyanovitch"), Option("male")))
-    Ok(Json.toJson(list))
+    //var list: List[Customer] = List[Customer](new Customer(Option(1),"crap", Option("crapovitch"), Option("male"), 1), new Customer(Option(2),"vasya", Option("vasilievits"), Option("male"), 1),
+    //new Customer(Option(3),"kolya", Option("kolyanovitch"), Option("male"), 1))
+    Ok(Json.toJson("list"))
   }
 
   def getCust = Action {
@@ -34,7 +34,14 @@ class Application extends Controller {
     (JsPath \ "id").write[Option[Int]] and
       (JsPath \ "name").write[String] and
       (JsPath \ "surname").write[Option[String]] and
-      (JsPath \ "gender").write[Option[String]]
+      (JsPath \ "gender").write[Option[String]] and
+      (JsPath \ "address").write[Address]
     )(unlift(Customer.unapply))
+
+  implicit val addressWrites: Writes[Address] = (
+    (JsPath \ "id").write[Int] and
+      (JsPath \ "street").write[String] and
+      (JsPath \ "city").write[String]
+    )(unlift(Address.unapply))
 
 }
